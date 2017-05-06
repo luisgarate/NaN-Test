@@ -3,7 +3,7 @@ class Parser
   require 'net/http'
 
   def initialize
-    @file_path = '/Users/luisgarate/Test/NaN-Test/app/services/webs.csv'
+    @file_path = '/Users/luisgarate/Test/Prueba-Repo/NaN-Test/app/services/webs.csv'
   end
 
   def file_parse
@@ -22,14 +22,20 @@ class Parser
         File.open(path,"r") do |file|
           file.each_line do |line|
             @webs_length[row.first.strip] += 1
-            scan_nan(line)
+            result = line.scan(/\w+\.js/)
+            unless result.empty?
+              @webs[row.first.strip] << result
+            end
           end
         end
       else
         uri = URI(path)
         response = Net::HTTP.get_response(uri).body
         @webs_length[row.first.strip] = response.length
-        scan_nan(response)
+        result = response.scan(/\w+\.js/)
+        unless result.empty?
+          @webs[row.first.strip] << result
+        end
       end
     end
     @webs.each do |web, js|
@@ -37,13 +43,11 @@ class Parser
     end
     p "Parsing finished"
   end
-
-  def scan_nan(response)
-    result = response.scan(/\w+\.js/)
-    unless result.empty?
-      @webs[row.first.strip] << result
-    end
-  end
+  # 
+  # def scan_nan(text, web)
+  #   result = text.scan(/\w+\.js/)
+  #   @webs[web] << result unless result.empty?
+  # end
 
   def dependencies
     @webs
