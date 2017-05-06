@@ -1,7 +1,7 @@
 # NaN-Test
 Test NaN Labs
 
-##Aclaraciones
+## Aclaraciones
 Este es el código original que evaluó Mariano Moretti. Se puede mejorar por medio de refactoring, aplicando un **extract method** en la siguiente sección de código.
 ```
     result = response.scan(/\w+\.js/)
